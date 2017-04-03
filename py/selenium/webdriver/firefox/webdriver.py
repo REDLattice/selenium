@@ -55,7 +55,7 @@ class WebDriver(RemoteWebDriver):
     def __init__(self, firefox_profile=None, firefox_binary=None,
                  timeout=30, capabilities=None, proxy=None,
                  executable_path="geckodriver", firefox_options=None,
-                 log_path="geckodriver.log"):
+                 log_path="geckodriver.log", service_args=None):
         """Starts a new local session of Firefox.
 
         Based on the combination and specificity of the various keyword
@@ -99,6 +99,13 @@ class WebDriver(RemoteWebDriver):
             defaults to picking up the binary from the system path.
         :param firefox_options: Instance of ``options.Options``.
         :param log_path: Where to log information from the driver.
+        :param service_args: Arguments to pass to geckodriver or the
+            specified executable_path.  An example usage is to pass
+            `['--connect-existing', '--marionette-port', '2828']`
+            to attach to an existing Firefox session.  Firefox has
+            to be started with the `--marionette` flag for this to work,
+            and it will return a port that geckodriver can use to
+            communicate (default is 2828).
 
         """
         self.binary = None
@@ -141,7 +148,7 @@ class WebDriver(RemoteWebDriver):
         if capabilities.get("marionette"):
             self._w3c = True
 
-            self.service = Service(executable_path, log_path=log_path)
+            self.service = Service(executable_path, log_path=log_path, service_args=service_args)
             self.service.start()
 
             capabilities.update(firefox_options.to_capabilities())

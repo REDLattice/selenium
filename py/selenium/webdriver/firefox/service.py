@@ -48,7 +48,9 @@ class Service(service.Service):
         self.service_args = service_args or []
 
     def command_line_args(self):
-        return ["--port", "%d" % self.port]
+        cls = self.service_args
+        cls.extend(["--port", "%d" % self.port])
+        return cls
 
     def send_remote_shutdown_command(self):
         pass
