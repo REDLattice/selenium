@@ -180,7 +180,7 @@ class WebDriver(object):
         if 'sessionId' not in response:
             response = response['value']
         self.session_id = response['sessionId']
-        self.capabilities = response['value']
+        self.capabilities = response['capabilities']
 
         # Quick check to see if we have a W3C Compliant browser
         self.w3c = response.get('status') is None
