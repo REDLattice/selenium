@@ -178,9 +178,13 @@ class WebDriver(object):
             capabilities['desiredCapabilities']['firefox_profile'] = browser_profile.encoded
         response = self.execute(Command.NEW_SESSION, capabilities)
         if 'sessionId' not in response:
-            response = response['value']
-        self.session_id = response['sessionId']
-        self.capabilities = response['capabilities']
+            # v0.16 compatible
+            self.session_id = response['value']['sessionId']
+            self.capabilities = response['value']['capabilities']
+        else:
+            # v0.14 compatible
+            self.session_id = response['sessionId']
+            self.capabilities = response['value']
 
         # Quick check to see if we have a W3C Compliant browser
         self.w3c = response.get('status') is None
